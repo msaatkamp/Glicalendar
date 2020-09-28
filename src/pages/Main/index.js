@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { Text, Switch } from "react-native";
 import styled from "styled-components/native";
-import DatePicker from "react-native-date-picker"
+import RNDateTimePicker from "@react-native-community/datetimepicker"
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const RegisterData = () =>{
 
     const [insuline, setInsuline] = useState(0)
     const [glicose, setGlicose] = useState(0)
-    const [date, setDate] = useState()
+    const [date, setDate] = useState(new Date(Date.now()))
+    const [hour, setHour] = useState(new Date(Date.now()))
+
+    const [displayDate, setDisplayDate] = useState(false)
+    const [displayHour, setDisplayHour] = useState(false)
+    
 
     const [basalInsuline, setBasalInsuline] = useState(0)
     const [showBasal, setShowBasal] = useState(false)
@@ -30,29 +36,54 @@ const RegisterData = () =>{
         }
     }
 
+    const handleDateChange = (event, date) => {
+        if(date!==undefined){
+            setDisplayDate(false)
+            setDate(date)
+        }
+    }
+
+    const handleHourChange = (event, date) => {
+        if(date!==undefined){
+            setDisplayHour(false)
+            setHour(date)
+        }
+    }
+    
+    const Data = typeof date === "object" ? `${date.getDay().toString()}/${date.getMonth().toString()}/${date.getFullYear().toString()}` : "HAHA";
+    const Hora = typeof hour === "object" ? `${date.getHours().toString()}:${date.getMinutes().toString()}` : "HAHA";
+
     return (
         <Content>
-            <Text>Home</Text>
+            <Text>-> Home</Text>
 
             <FormContent>
             <FormData>
-                <LabelText>
-                    Data e Hora da medição
+                {/* <FontAwesome5 name="calendar" size={24} color="black" onPress={() => setDisplayDate(true)}/> */}
+                <LabelText onPress={() => setDisplayDate(true)}>
+                    Data medição - {Data}
                 </LabelText>
-                <DatePicker date={date} onDateChange={setDate}/>
+                {displayDate === true && <RNDateTimePicker mode="date" onChange={handleDateChange} value={date || new Date()}/>}
             </FormData>
+            {<FormData>
+                {/* <FontAwesome5 name="clock" size={24} color="black" onPress={() => setDisplayHour(true)}/> */}
+                <LabelText onPress={() => setDisplayHour(true)}>
+                    Hora medição - {Hora}
+                </LabelText>
+                {displayHour === true && <RNDateTimePicker mode="time" onChange={handleHourChange} value={hour || new Date()}/>}
+            </FormData>}
 
             <FormData>
                 <LabelText>
                     Glicose
                 </LabelText>
-                <TextBox keyboardType={'numeric'} value={glicose} onChangeText={setGlicoseValue}/> 
+                <TextBox keyboardType="numeric" value={glicose} onChangeText={setGlicoseValue}/> 
             </FormData>
             <FormData>
                 <LabelText>
                     UL Insulina
                 </LabelText>
-                <TextBox keyboardType="numercic" numeric value={insuline} onChangeText={setInsulineValue}/> 
+                <TextBox keyboardType="numeric" value={insuline} onChangeText={setInsulineValue}/> 
             </FormData>
             </FormContent>
 
@@ -109,6 +140,8 @@ const FormData = styled.View`
 const LabelText = styled.Text`
     font-size: 20px;
     flex: 1;
+    display: flex;
+    justify-content: space-around;
 `
 
 const TextBox = styled.TextInput`
@@ -117,6 +150,7 @@ const TextBox = styled.TextInput`
     margin: 4px;
     flex: 2;
     border-radius: 10px;
+    padding: 0px 4px;
 `
 
 export default RegisterData
