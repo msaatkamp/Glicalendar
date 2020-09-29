@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { Text, Switch } from "react-native";
+import React, { useState, useContext } from "react";
+import { Text, Switch, Button } from "react-native";
 import styled from "styled-components/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Register } from "../../context";
 
 const RegisterData = () =>{
 
-    const [insuline, setInsuline] = useState(0)
+    const {measures, handleMeasures} = useContext(Register)
+    const [insulina, setInsulina] = useState(0)
     const [glicose, setGlicose] = useState(0)
     const [date, setDate] = useState(new Date(Date.now()))
     const [hour, setHour] = useState(new Date(Date.now()))
@@ -15,12 +17,12 @@ const RegisterData = () =>{
     const [displayHour, setDisplayHour] = useState(false)
     
 
-    const [basalInsuline, setBasalInsuline] = useState(0)
+    const [basalinsulina, setBasalinsulina] = useState(0)
     const [showBasal, setShowBasal] = useState(false)
 
-    const setInsulineValue = (text) => {
+    const setInsulinaValue = (text) => {
         if (/^\d+$/.test(text)) {
-            setInsuline(text)
+            setInsulina(text)
         }
     }
 
@@ -30,9 +32,9 @@ const RegisterData = () =>{
         }
     }
 
-    const setBasalInsulineValue = (text) => {
+    const setBasalinsulinaValue = (text) => {
         if (/^\d+$/.test(text)) {
-            setBasalInsuline(text)
+            setBasalinsulina(text)
         }
     }
 
@@ -83,7 +85,7 @@ const RegisterData = () =>{
                 <LabelText>
                     UL Insulina
                 </LabelText>
-                <TextBox keyboardType="numeric" value={insuline} onChangeText={setInsulineValue}/> 
+                <TextBox keyboardType="numeric" value={insulina} onChangeText={setInsulinaValue}/> 
             </FormData>
             </FormContent>
 
@@ -99,12 +101,15 @@ const RegisterData = () =>{
                 showBasal && 
                 <FormData>
                     <LabelText>Unidades </LabelText>
-                    <TextBox keyboardType={'numeric'} value={basalInsuline} onChangeText={setBasalInsulineValue}/> 
+                    <TextBox keyboardType={'numeric'} value={basalinsulina} onChangeText={setBasalinsulinaValue}/> 
                 </FormData>
             }
             </FormContent>
 
-            
+            <Button onPress={() => {
+                setMeasures(...measures, {glicose, insulina: insulina, data: new Date()})
+            }} title="Registrar">
+            </Button>
         </Content>
     )
 } 

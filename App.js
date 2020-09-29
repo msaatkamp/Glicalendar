@@ -5,11 +5,13 @@ import styled from "styled-components/native";
 import Main from "./src/pages/Main"
 import Calendar from "./src/pages/Calendar"
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Register } from "./src/context";
 
 const About = () => <Text>About</Text>;
 
 const App = () => {
   const [location, setLocation] = useState(null)
+  const [measures, setMeasures] = useState([])
 
   /*useEffect(() => {
     if(window?.location?.pathname && location !== window?.location?.pathname) {
@@ -24,9 +26,11 @@ const App = () => {
       <Header>Glicalendar</Header>
 
       <Content>
-        <Route exact path="/" component={Main} />
-        <Route path="/calendar" component={Calendar} />
-        <Route path="/about" component={About} />
+        <Register.Provider value={{measures, handleMeasures: setMeasures}}>
+          <Route exact path="/" component={Main} />
+          <Route path="/calendar" component={Calendar} />
+          <Route path="/about" component={About} />
+        </Register.Provider>
       </Content>
 
       <Navbar>
