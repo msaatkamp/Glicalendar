@@ -13,24 +13,25 @@ const App = () => {
   const [location, setLocation] = useState(null)
   const [measures, setMeasures] = useState([])
 
-  /*useEffect(() => {
+  useEffect(() => {
     if(window?.location?.pathname && location !== window?.location?.pathname) {
       setLocation(window.location.pathname)
     }
-  }, [location])*/
+  }, [location])
 
 
   return (
   <Router>
+    
+    <Register.Provider value={{measures: measures, handleMeasures: setMeasures}}>
     <Container>
       <Header>Glicalendar</Header>
+      <Text>Path: {location}</Text>
 
       <Content>
-        <Register.Provider value={{measures, handleMeasures: setMeasures}}>
           <Route exact path="/" component={Main} />
           <Route path="/calendar" component={Calendar} />
           <Route path="/about" component={About} />
-        </Register.Provider>
       </Content>
 
       <Navbar>
@@ -54,6 +55,8 @@ const App = () => {
         </Link>
       </Navbar>
       </Container>
+      </Register.Provider>
+
   </Router>
 )};
 

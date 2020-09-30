@@ -6,12 +6,11 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Register } from "../../context";
 
 const RegisterData = () =>{
-
+    const inicialDate = new Date(Date.now())
     const {measures, handleMeasures} = useContext(Register)
     const [insulina, setInsulina] = useState(0)
     const [glicose, setGlicose] = useState(0)
-    const [date, setDate] = useState(new Date(Date.now()))
-    const [hour, setHour] = useState(new Date(Date.now()))
+    const [date, setDate] = useState(inicialDate)
 
     const [displayDate, setDisplayDate] = useState(false)
     const [displayHour, setDisplayHour] = useState(false)
@@ -41,19 +40,13 @@ const RegisterData = () =>{
     const handleDateChange = (event, date) => {
         if(date!==undefined){
             setDisplayDate(false)
+            setDisplayHour(false)
             setDate(date)
         }
     }
-
-    const handleHourChange = (event, date) => {
-        if(date!==undefined){
-            setDisplayHour(false)
-            setHour(date)
-        }
-    }
     
-    const Data = typeof date === "object" ? `${date.getDay().toString()}/${date.getMonth().toString()}/${date.getFullYear().toString()}` : "HAHA";
-    const Hora = typeof hour === "object" ? `${date.getHours().toString()}:${date.getMinutes().toString()}` : "HAHA";
+    const Data = typeof date === "object" ? `${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}` : "HAHA";
+    const hour = `${date.getHours() <= "9" ? "0" + date.getHours() : date.getHours()}:${date.getMinutes() <= "9" ? "0" + date.getMinutes() : date.getMinutes()}`
 
     return (
         <Content>
@@ -65,14 +58,14 @@ const RegisterData = () =>{
                 <LabelText onPress={() => setDisplayDate(true)}>
                     Data medição - {Data}
                 </LabelText>
-                {displayDate === true && <RNDateTimePicker mode="date" onChange={handleDateChange} value={date || new Date()}/>}
+                {displayDate === true && <RNDateTimePicker mode="date" onChange={handleDateChange} value={date}/>}
             </FormData>
             {<FormData>
                 {/* <FontAwesome5 name="clock" size={24} color="black" onPress={() => setDisplayHour(true)}/> */}
                 <LabelText onPress={() => setDisplayHour(true)}>
-                    Hora medição - {Hora}
+                    Hora medição - {hour}
                 </LabelText>
-                {displayHour === true && <RNDateTimePicker mode="time" onChange={handleHourChange} value={hour || new Date()}/>}
+                {displayHour === true && <RNDateTimePicker mode="time" onChange={handleDateChange} value={date}/>}
             </FormData>}
 
             <FormData>
@@ -107,7 +100,13 @@ const RegisterData = () =>{
             </FormContent>
 
             <Button onPress={() => {
-                setMeasures(...measures, {glicose, insulina: insulina, data: new Date()})
+                if(
+                    insulina > 0 && glicose > 0
+                ) {
+                    handleMeasures([...measures, {glicose, insulina: insulina, data: new Date()}])
+                } else {
+                    alert("Valores nao definidos para glicose ou insulina")
+                }
             }} title="Registrar">
             </Button>
         </Content>
