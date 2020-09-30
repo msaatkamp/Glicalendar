@@ -46,10 +46,9 @@ const RegisterData = () =>{
     
     const Data = typeof date === "object" ? `${date.getDate().toString()}/${(date.getMonth() + 1).toString()}/${date.getFullYear().toString()}` : "HAHA";
     const hour = `${date.getHours() <= "9" ? "0" + date.getHours() : date.getHours()}:${date.getMinutes() <= "9" ? "0" + date.getMinutes() : date.getMinutes()}`
-
     return (
         <Content>
-            <Text>-> Home</Text>
+            <Text>-> Home </Text>
 
             <FormContent>
             <FormData>
@@ -99,7 +98,7 @@ const RegisterData = () =>{
 
             <Button onPress={() => {
                 if(
-                    insulina > 0 && glicose > 0
+                    insulina >= 0 && glicose > 0
                 ) {
                     handleMeasures([...measures, {glicose, insulina: insulina, data: date}])
                 } else {
@@ -107,44 +106,17 @@ const RegisterData = () =>{
                 }
             }} title="Registrar">
             </Button>
-
-
-            <FormContent>
-                {measures.map(e => {
-                    const data = typeof date === "object" ? `${e.data.getDate().toString()}/${(e.data.getMonth() + 1).toString()}/${e.data.getFullYear().toString()}` : "HAHA";
-                    const hora = `${e.data.getHours() <= "9" ? "0" + e.data.getHours() : e.data.getHours()}:${e.data.getMinutes() <= "9" ? "0" + e.data.getMinutes() : e.data.getMinutes()}`
-
-                    return (
-                        <FormData>
-                            <GlicoseCell>
-                                <Text>
-                                    {e.glicose}
-                                </Text>
-                                <Text>
-                                     mg/dl
-                                </Text>
-                            </GlicoseCell>
-                            
-                            <Text>
-                                {e.insulina} UI
-                            </Text>
-                            <Text>
-                                {data} {hora}
-                            </Text>
-                        </FormData>
-                    )
-                })}
-            </FormContent>
         </Content>
     )
 } 
 
+
 const Content = styled.View`
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: space-between;
-    align-content: flex-start;
-    width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  background-color: #EEE;
+  flex-grow: 8;
+  padding: 16px;
 `
 
 const FormContent = styled.View`

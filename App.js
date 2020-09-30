@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View } from "react-native";
-import { Router, Route, Link,  } from "./react-router";
+import { Router, Route, Link, useLocation  } from "./react-router";
 import styled from "styled-components/native";
 import Main from "./src/pages/Main"
 import Calendar from "./src/pages/Calendar"
@@ -10,55 +10,51 @@ import { Register } from "./src/context";
 const About = () => <Text>About</Text>;
 
 const App = () => {
-  const [location, setLocation] = useState(null)
   const [measures, setMeasures] = useState([])
 
-  useEffect(() => {
-    if(window?.location?.pathname && location !== window?.location?.pathname) {
-      setLocation(window.location.pathname)
-    }
-  }, [location])
-
-
-  return (
-  <Router>
+  return (  
+  <Register.Provider value={{measures: measures, handleMeasures: setMeasures}}>
     
-    <Register.Provider value={{measures: measures, handleMeasures: setMeasures}}>
     <Container>
       <Header>Glicalendar</Header>
-      <Text>Path: {location}</Text>
-
+    <Router>
       <Content>
           <Route exact path="/" component={Main} />
           <Route path="/calendar" component={Calendar} />
           <Route path="/about" component={About} />
       </Content>
+      <NavigationMenu/>
+    
+  </Router>
+  </Container>
+  </Register.Provider>
+)};
 
-      <Navbar>
+const NavigationMenu = () => {
+  const location = useLocation().pathname
+
+  return (
+  <Navbar>
         <Link to="/">
-          <MenuButton selected={"/" === location} onPress={() => setLocation("/")}>
+          <MenuButton selected={"/" === location}>
           <FontAwesome5 name="home" size={24} color="black" />{"\n"}
             Início 
           </MenuButton>
         </Link>
         <Link to="/calendar">
-          <MenuButton selected={"/calendar" === location} onPress={() => setLocation("/calendar")}>
+          <MenuButton selected={"/calendar" === location} >
           <FontAwesome5 name="calendar" size={24} color="black" />{"\n"}
             Calendar
           </MenuButton>
         </Link>
-        <Link to="/about">
-          <MenuButton selected={"/about" === location} onPress={() => setLocation("/about")}>
+        <Link to="/about" >
+          <MenuButton selected={"/about" === location}>
           <FontAwesome5 name="address-card" size={24} color="black" />{"\n"}
             Sobre
           </MenuButton>
         </Link>
-      </Navbar>
-      </Container>
-      </Register.Provider>
-
-  </Router>
-)};
+    </Navbar>)
+}
 
 const Container = styled.View`
   display: flex;
