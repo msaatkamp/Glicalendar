@@ -40,7 +40,6 @@ const RegisterData = () =>{
     const handleDateChange = (event, date) => {
         if(date!==undefined){
             setDisplayDate(false)
-            setDisplayHour(false)
             setDate(date)
         }
     }
@@ -55,17 +54,16 @@ const RegisterData = () =>{
             <FormContent>
             <FormData>
                 {/* <FontAwesome5 name="calendar" size={24} color="black" onPress={() => setDisplayDate(true)}/> */}
-                <LabelText onPress={() => setDisplayDate(true)}>
+                <LabelText onPress={() => setDisplayDate("date")}>
                     Data medição - {Data}
                 </LabelText>
-                {displayDate === true && <RNDateTimePicker mode="date" onChange={handleDateChange} value={date}/>}
+                {displayDate && <RNDateTimePicker mode={displayDate === "date" ? "date" : "time"} onChange={handleDateChange} value={date}/>}
             </FormData>
             {<FormData>
                 {/* <FontAwesome5 name="clock" size={24} color="black" onPress={() => setDisplayHour(true)}/> */}
-                <LabelText onPress={() => setDisplayHour(true)}>
+                <LabelText onPress={() => setDisplayDate("hour")}>
                     Hora medição - {hour}
                 </LabelText>
-                {displayHour === true && <RNDateTimePicker mode="time" onChange={handleDateChange} value={date}/>}
             </FormData>}
 
             <FormData>
@@ -103,12 +101,40 @@ const RegisterData = () =>{
                 if(
                     insulina > 0 && glicose > 0
                 ) {
-                    handleMeasures([...measures, {glicose, insulina: insulina, data: new Date()}])
+                    handleMeasures([...measures, {glicose, insulina: insulina, data: date}])
                 } else {
                     alert("Valores nao definidos para glicose ou insulina")
                 }
             }} title="Registrar">
             </Button>
+
+
+            <FormContent>
+                {measures.map(e => {
+                    const data = typeof date === "object" ? `${e.data.getDate().toString()}/${(e.data.getMonth() + 1).toString()}/${e.data.getFullYear().toString()}` : "HAHA";
+                    const hora = `${e.data.getHours() <= "9" ? "0" + e.data.getHours() : e.data.getHours()}:${e.data.getMinutes() <= "9" ? "0" + e.data.getMinutes() : e.data.getMinutes()}`
+
+                    return (
+                        <FormData>
+                            <GlicoseCell>
+                                <Text>
+                                    {e.glicose}
+                                </Text>
+                                <Text>
+                                     mg/dl
+                                </Text>
+                            </GlicoseCell>
+                            
+                            <Text>
+                                {e.insulina} UI
+                            </Text>
+                            <Text>
+                                {data} {hora}
+                            </Text>
+                        </FormData>
+                    )
+                })}
+            </FormContent>
         </Content>
     )
 } 
@@ -136,6 +162,14 @@ const FormData = styled.View`
     padding: 4px;
     margin: 4px;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`
+
+const GlicoseCell = styled.View`
+    padding: 4px;
+    margin: 4px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
