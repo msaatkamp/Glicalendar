@@ -3,11 +3,10 @@ import { Text, View } from "react-native";
 import { Router, Route, Link, useLocation  } from "./react-router";
 import styled from "styled-components/native";
 import Main from "./src/pages/Main"
+import About from "./src/pages/About"
 import Calendar from "./src/pages/Calendar"
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Register } from "./src/context";
-
-const About = () => <Text>About</Text>;
 
 const App = () => {
   const [measures, setMeasures] = useState([])

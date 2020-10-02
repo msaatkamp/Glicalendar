@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#FFF"
+    },
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "com.msaatkamp.glicalendar"
+    },
+    "ios": {
+      "bundleIdentifier": "com.msaatkamp.glicalendar"
+    }
+  }
+}

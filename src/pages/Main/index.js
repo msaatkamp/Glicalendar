@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { Text, Switch, Button } from "react-native";
 import styled from "styled-components/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker"
-import { FontAwesome5 } from "@expo/vector-icons";
 import { Register } from "../../context";
 
 const RegisterData = () =>{
@@ -12,9 +11,7 @@ const RegisterData = () =>{
     const [glicose, setGlicose] = useState(0)
     const [date, setDate] = useState(inicialDate)
 
-    const [displayDate, setDisplayDate] = useState(false)
-    const [displayHour, setDisplayHour] = useState(false)
-    
+    const [displayDate, setDisplayDate] = useState(false)   
 
     const [basalinsulina, setBasalinsulina] = useState(0)
     const [showBasal, setShowBasal] = useState(false)
@@ -48,7 +45,7 @@ const RegisterData = () =>{
     const hour = `${date.getHours() <= "9" ? "0" + date.getHours() : date.getHours()}:${date.getMinutes() <= "9" ? "0" + date.getMinutes() : date.getMinutes()}`
     return (
         <Content>
-            <Text>-> Home </Text>
+            <Text>-> Início</Text>
 
             <FormContent>
             <FormData>
@@ -94,18 +91,68 @@ const RegisterData = () =>{
                     <TextBox keyboardType={'numeric'} value={basalinsulina} onChangeText={setBasalinsulinaValue}/> 
                 </FormData>
             }
-            </FormContent>
 
             <Button onPress={() => {
                 if(
                     insulina >= 0 && glicose > 0
                 ) {
-                    handleMeasures([...measures, {glicose, insulina: insulina, data: date}])
+                    setGlicose(null)
+                    setInsulina(null)
+                    setDate(new Date())
+                    handleMeasures([...measures, {glicose, insulina: insulina, data: date, id: (measures.length + 1)}])
+                    alert("Medida registrada.")
                 } else {
                     alert("Valores nao definidos para glicose ou insulina")
                 }
             }} title="Registrar">
             </Button>
+            </FormContent>
+
+
+            <FormContent>
+            <Text> - Últimos registros</Text>
+            <FormData>
+                <GlicoseCell>
+                    <Text>
+                        Glicose
+                    </Text>
+                </GlicoseCell>
+                
+                <Text>
+                    Insulina UI
+                </Text>
+                <Text>
+                    Data/Hora
+                </Text>
+            </FormData>
+            {measures.length > 0 && measures.reverse().map((e, i) => {
+                    if(i<3) {
+                    const data = typeof e.data === "object" ? `${e.data.getDate().toString()}/${(e.data.getMonth() + 1).toString()}/${e.data.getFullYear().toString()}` : "";
+                    const hora = `${e.data.getHours() <= "9" ? "0" + e.data.getHours() : e.data.getHours()}:${e.data.getMinutes() <= "9" ? "0" + e.data.getMinutes() : e.data.getMinutes()}`
+
+                    return (
+                        <FormData>
+                            <GlicoseCell>
+                                <Text>
+                                    {e.glicose}
+                                </Text>
+                                <Text>
+                                     mg/dl
+                                </Text>
+                            </GlicoseCell>
+                            
+                            <Text>
+                                {e.insulina} UI
+                            </Text>
+                            <Text>
+                                {data} {hora}
+                            </Text>
+                        </FormData>
+                    )
+                }
+                })}
+                
+            </FormContent>
         </Content>
     )
 } 
@@ -115,7 +162,7 @@ const Content = styled.View`
   display: flex;
   flex-flow: column wrap;
   background-color: #EEE;
-  flex-grow: 8;
+  width: 100%;
   padding: 16px;
 `
 

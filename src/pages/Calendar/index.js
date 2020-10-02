@@ -8,7 +8,7 @@ const Calendar = () => {
 
     return(
         <Content>
-            <Text>Calendar</Text>
+            <Text>Calendário</Text>
 
             <FormContent>
                 {measures.length > 0 ? measures.map(e => {
@@ -35,7 +35,7 @@ const Calendar = () => {
                         </FormData>
                     )
                 }) : <Text>
-                        No records registered.
+                        Não há registors disponíveis.
                     </Text>}
             </FormContent>
         </Content>
@@ -45,7 +45,7 @@ const Content = styled.View`
   display: flex;
   flex-flow: column wrap;
   background-color: #EEE;
-  flex-grow: 8;
+  width: 100%;
   padding: 16px;
 `
 
