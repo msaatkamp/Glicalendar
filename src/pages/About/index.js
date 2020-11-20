@@ -5,8 +5,6 @@ import styled from "styled-components/native";
 const About = () =>{
     return (
         <Content>
-            <Text>-> Sobre</Text>
-
             <FormContent>
                 
 

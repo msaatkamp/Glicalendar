@@ -8,35 +8,64 @@ const Calendar = () => {
 
     return(
         <Content>
-            <Text>Calendário</Text>
-
             <FormContent>
-                {measures.length > 0 ? measures.map(e => {
+                
+            <FormData>
+                <GlicoseCell>
+                    <Text>
+                        Glicose
+                    </Text>
+                </GlicoseCell>
+                <GlicoseCell>
+                <Text>
+                    Insulina UI
+                </Text>
+                </GlicoseCell>
+                <GlicoseCell>
+
+                <Text>
+                    Data/Hora
+                </Text>
+                </GlicoseCell>
+            </FormData>
+                {measures.length > 0 ? measures.map((e, i) => {
                     const data = typeof e.data === "object" ? `${e.data.getDate().toString()}/${(e.data.getMonth() + 1).toString()}/${e.data.getFullYear().toString()}` : "HAHA";
                     const hora = `${e.data.getHours() <= "9" ? "0" + e.data.getHours() : e.data.getHours()}:${e.data.getMinutes() <= "9" ? "0" + e.data.getMinutes() : e.data.getMinutes()}`
 
                     return (
-                        <FormData>
+                        <FormData key={i}>
                             <GlicoseCell>
-                                <Text>
+                                <TextSpan color={e.glicose && e.glicose > 160 || e.glicose <= 60 ? "red" : "green"}>
                                     {e.glicose}
-                                </Text>
+                                </TextSpan>
                                 <Text>
                                      mg/dl
                                 </Text>
                             </GlicoseCell>
                             
-                            <Text>
-                                {e.insulina} UI
-                            </Text>
+                            <GlicoseCell>
+                            <TextSpan color={e.insulina && e.insulina > 14 ? "red" : "green"}>
+                                {e.insulina} 
+                                <TextSpan color="black">
+                                    UI
+                                </TextSpan>
+                            </TextSpan>
+                            </GlicoseCell>
+
+                            <GlicoseCell>
+
                             <Text>
                                 {data} {hora}
                             </Text>
+                            </GlicoseCell>
+                            
                         </FormData>
                     )
-                }) : <Text>
-                        Não há registors disponíveis.
-                    </Text>}
+                }) : <GlicoseCell>
+                    <Text>
+                        Não há registros disponíveis.
+                    </Text>
+                    </GlicoseCell>}
             </FormContent>
         </Content>
     )
@@ -75,6 +104,10 @@ const GlicoseCell = styled.View`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+`
+
+const TextSpan = styled.Text`
+    color: ${(props) => props.color ? props.color : "black"}
 `
 
 export default Calendar
